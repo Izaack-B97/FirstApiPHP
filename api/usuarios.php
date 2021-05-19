@@ -1,4 +1,5 @@
 <?php 
+    include_once('../clases/class-usuario.php');
 
     header('Content-Type: application/json');
 
@@ -8,17 +9,21 @@
     
     switch ( $_SERVER['REQUEST_METHOD'] ) {
         case 'GET':
+            
+
             // Obtenemos la info de un usuario 
             if (isset($_GET['id'])) {
                 $result['message'] = 'Informacion del usuario ' . $_GET['id'];
             }
             // Todos los usuarios
             else {
-                $result['message'] = 'Obtuviste todos los usuarios';
+                Usuario :: getUser();
             }
             break;
         case 'POST':
             $_POST = json_decode( file_get_contents('php://input'), true ); // Convierte el json a un array asociativo
+            $usuario = new Usuario( $_POST['nombre'], $_POST['apellido'], $_POST['fechaNacimiento'], $_POST['sexo'] );
+            $usuario -> createUser();
             $result['message'] = 'Nuevo usuario';
             $result['data'] = $_POST;
             break;
