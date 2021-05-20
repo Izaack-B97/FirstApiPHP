@@ -9,15 +9,14 @@
     
     switch ( $_SERVER['REQUEST_METHOD'] ) {
         case 'GET':
-            
-
             // Obtenemos la info de un usuario 
             if (isset($_GET['id'])) {
                 $result['message'] = 'Informacion del usuario ' . $_GET['id'];
+                $result['data']    =  Usuario :: getUser( $_GET['id'] );
             }
             // Todos los usuarios
             else {
-                Usuario :: getUser();
+                $result['data'] = Usuario :: getUser();
             }
             break;
         case 'POST':
@@ -31,7 +30,7 @@
             $_PUT = json_decode( file_get_contents('php://input'), true ); // Convierte el json a un array asociativo
             if ( isset( $_GET['id'] ) ) {
                 $result['message'] = 'Usuario a actualizar ';
-                $result['data'] = $_PUT;
+                $result['data'] = Usuario :: updateUser( $_GET['id'], $_PUT );;
             } else {
                 $result['message'] = 'El id del usuario es requerido';
             }

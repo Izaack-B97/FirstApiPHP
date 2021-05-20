@@ -46,8 +46,19 @@
 
         // ************************************ CRUD ***********************************
 
-        public static function getUser() {
-            echo file_get_contents('../data/usuarios.json');
+        public static function getUser( $id = null ) {
+            
+            $result = null;
+
+            if ( $id != null ) {
+                $usuarios = file_get_contents('../data/usuarios.json');
+                $usuarios = json_decode( $usuarios, true );
+                $result = $usuarios[ $id - 1 ];
+            } else {
+                $result = json_decode(file_get_contents('../data/usuarios.json'), true);
+            }
+
+            return $result;
         }
 
         public function createUser() {
@@ -65,8 +76,24 @@
             fclose( $archivo ); // Cerramos el archivo
         }
 
-        public function updateUser() {
+        public static function updateUser( $id = null, $data ) {
+            if ( $id != null ) {
+                $contenidoArchivo = file_get_contents('../data/usuarios.json');
+                $usuarios = json_decode( $contenidoArchivo, true );
+                $index = $id - 1;
+                
+                $usuarios[ $index ]['nombre'] = $data['nombre'];
+                $usuarios[ $index ]['apellido'] = $data['apellido'];
+                $usuarios[ $index ]['fechaNacimiento'] = $data['fechaNacimiento'];
+                $usuarios[ $index ]['genero'] = $data['genero'];
+                
+                $archivo = fopen( '../data/usuarios.json', 'w' );
+                fwrite( $archivo, json_encode($usuarios) );
+                fclose( $archivo );
 
+                $usuarioUpdate = $usuarios[ $index ];
+                return $usuarioUpdate;
+            }
         }
 
         public function deleteUser() {
