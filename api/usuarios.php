@@ -37,7 +37,7 @@
             break;
         case 'DELETE':
             if ( isset( $_GET['id'] ) ) {
-                $result['message'] = 'Haz eliminado al usuario ' . $_GET['id'];
+                $result['message'] = Usuario :: deleteUser( $_GET['id'] );
             } else {
                 $result['message'] = 'Necesitamos el id del usuario para eliminarlo';
             }

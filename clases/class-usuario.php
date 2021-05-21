@@ -96,8 +96,25 @@
             }
         }
 
-        public function deleteUser() {
+        public static function deleteUser( $id = null ) {
+            
+            if ( $id != null ) {
+                
+                $contenidoArchivo = file_get_contents('../data/usuarios.json');
+                $usuarios = json_decode( $contenidoArchivo, true );
 
+                if ( array_key_exists( $id - 1 , $usuarios ) ) {
+                    unset( $usuarios[ $id - 1 ] );
+
+                    $archivo = fopen('../data/usuarios.json', 'w');
+                    fwrite( $archivo, json_encode( $usuarios ) );
+                    fclose( $archivo );
+
+                    return 'El usuario con el id ' . $id . ' ha sido eliminado';
+                } else {
+                    return 'El usuario no existe';
+                }
+            }
         }
   
         // ********************************* END CRUD ************************************
